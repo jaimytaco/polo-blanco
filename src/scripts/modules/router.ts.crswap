@@ -1,0 +1,75 @@
+import { IDatabaseActor } from '../interfaces/database.interface'
+import { IError } from '../interfaces/error.interface'
+import { Database } from '../modules/database'
+import { EDatabaseMode } from '../enums/database.enum'
+import { Category } from '../models/'
+
+interface IViewContentHead {
+    title: string,
+    meta: string
+}
+
+interface IViewContent {
+    head: IViewContentHead,
+    body: string
+}
+
+interface IView implements IError {
+    content: IViewContent
+}
+
+export class Router {
+    static database: IDatabaseActor
+    static views = {
+        'public-dynamic': async function (): IViewContent {
+            const categories = await Category.getAll(this.database, EDatabaseMode.Online)
+
+            return {
+                head: {
+                    title: `
+                        <title>Dynamic | Polo Blanco</title>
+                    `,
+                    meta: `
+                        <meta name="description" content="Dynamic description in Polo Blanco.">
+                    `
+                },
+                body: categories
+                    .map(function (category) {
+                        return `<a style="width: 100%; display: block;" href="/category/${category.slug}">Go to ${category.slug}</a>`
+                    })
+                    .join('')
+            }
+        }
+    }
+
+    static async initDatabase() {
+        this.database = Database
+        await this.database.init()
+    }
+
+    static getViewIdByPathname(pathname: string): string | null {
+        if (pathname === '/dynamic') return 'public-dynamic'
+
+        return null
+    }
+
+    static async getViewContent(viewId: string): IView {
+        console.log('viewId =', viewId)
+        const contentFn: Function | undefined = this.views[viewId]
+        if (!contentFn) return { err: 'view not found' }
+
+        const content = await contentFn()
+
+        return {
+            content,
+            err: !content ? 'view not found' : null
+        }
+    }
+
+    static async getDynamicContent({ pathname, viewId }): IView {
+        if (!this.database) await this.initDatabase()
+        if (!viewId) viewId = this.getViewIdByPathname(pathname)
+
+        return this.getViewContent(viewId)
+    }
+}

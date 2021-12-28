@@ -1,0 +1,19 @@
+{
+  "name": "polo-blanco",
+  "version": "0.0.1",
+  "private": true,
+  "scripts": {
+    "dev": "astro dev",
+    "start": "astro dev",
+    "build": "astro build",
+    "preview": "astro preview"
+  },
+  "dependencies": {
+    "comlink": "^4.3.1",
+    "firebase": "^9.6.1",
+    "idb": "^7.0.0"
+  },
+  "devDependencies": {
+    "astro": "^0.20.1"
+  }
+}

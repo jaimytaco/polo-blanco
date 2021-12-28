@@ -1,0 +1,23 @@
+---
+
+import HomeLayout from '../layouts/HomeLayout.astro'
+import { EDatabaseMode } from '../scripts/enums/database.enum'
+import { Database } from '../scripts/modules/database'
+import { Category } from '../scripts/models/category.model'
+
+await Database.init()
+const docs = await Category.getAll(Database, EDatabaseMode.Online)
+
+---
+    
+<HomeLayout title="index">
+    <h1>Playing in index </h1>
+    <a style="width: 100%; display: block;" href="/about">Go to about</a>
+
+    {
+        docs
+            .map(function(doc){
+                return `<a style="width: 100%; display: block;" href="/category/${doc.slug}">Go to ${doc.slug}</a>`
+            })
+    }
+</HomeLayout>
