@@ -39,7 +39,7 @@ export function supportsWorkerType(){
 }
 
 export function supportsIndexedDB() {
-    return isBrowser() ? !!window.indexedDB : false
+    return isServiceWorker() || isBrowser() ? !!indexedDB : false
 }
 
 export function getIndexedDBDatabases(): Promise<IIndexedDBDatabase[]>{

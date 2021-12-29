@@ -22,7 +22,9 @@ export class Database implements IDatabase{
         
         await this.actor.init(EDatabaseMode.Online)
 
-        if (isBrowser()){
+        if (isServiceWorker() || isBrowser()){
+            console.log('installing local database')
+            console.log('this.supportsLocalDb =', this.supportsLocalDb)
             if (this.supportsLocalDB){
                 const { isOfflineFirst, isFirstLoad } = await this.actor.init(EDatabaseMode.Local)
                 if (isOfflineFirst && isFirstLoad) await this.loadLocalDatabase()

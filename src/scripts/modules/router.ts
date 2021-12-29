@@ -31,7 +31,7 @@ export class Router {
 
         return {
             'public-dynamic': async function (): IViewContent {
-                const categories = await Category.getAll(database, EDatabaseMode.Online)
+                const categories = await Category.getAll(database, EDatabaseMode.Local)
                 console.log('categories =', categories)
 
                 return {
@@ -71,7 +71,7 @@ export class Router {
     }
 
     static async getDynamicContent({ pathname, viewId }): IView {
-        if (!this.database) await this.initDatabase()
+        // if (!this.database) await this.initDatabase()
         if (!viewId) viewId = this.getViewIdByPathname(pathname)
 
         return this.getViewContent(viewId)

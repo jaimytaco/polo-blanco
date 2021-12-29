@@ -1,7 +1,7 @@
 import { Router } from '/_astro/src/scripts/modules/router.js'
 
 const STATIC_CACHE_PREFIX = 'sw-poloblanco'
-const STATIC_CACHE_VERSION = 48
+const STATIC_CACHE_VERSION = 58
 const STATIC_CACHE_NAME = `${STATIC_CACHE_PREFIX}-static-${STATIC_CACHE_VERSION}`
 
 const ALL_CACHES = [
@@ -68,6 +68,8 @@ const cacheStaticAssets = async _ => {
     try {
         const cache = await caches.open(STATIC_CACHE_NAME)
         cache.addAll(TO_CACHE)
+
+        await Router.initDatabase()
     } catch (err) {
         console.error(err)
     }
