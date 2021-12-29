@@ -31,6 +31,7 @@ export class Database implements IDatabase{
     }
 
     static async loadLocalDatabase(){
+        console.log('loadLocalDatabase')
         const modelsToLoad = {
             'categories': await Category.getAll(this, EDatabaseMode.Online)
         };

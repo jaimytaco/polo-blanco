@@ -5,5 +5,5 @@ export class IDatabase{
     supportsLocalDB: boolean
     actor: IDatabaseActor | T
     init: Function
-    loadLocalDatabase: Function
+    loadLocalDatabase: Function 
 }

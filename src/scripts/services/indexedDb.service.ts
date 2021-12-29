@@ -5,7 +5,7 @@ import { IIndexedDBDatabase } from '../interfaces/browser.interface'
 
 export class IndexedDb {
     static dbPrefix = 'polo-blanco-idb'
-    static dbVersion = 'v1'
+    static dbVersion = 'v2'
     static storeNames = [
         'categories'
     ]
@@ -83,6 +83,7 @@ export class IndexedDb {
     }
 
     static async getInitialData(collectionName: string, /*filters: IDatabaseFilter[],*/ mode: 'single' | 'all') {
+        console.log('getInitialData')
         const ldb = await this.localDbPromise;
         if (!ldb) return;
         // if (!filters.length) return;

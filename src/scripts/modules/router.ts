@@ -32,6 +32,7 @@ export class Router {
         return {
             'public-dynamic': async function (): IViewContent {
                 const categories = await Category.getAll(database, EDatabaseMode.Online)
+                console.log('categories =', categories)
 
                 return {
                     head: {
@@ -60,7 +61,7 @@ export class Router {
 
     static async getViewContent(viewId: string): IView {
         const contentFn = this.getViewGenerator(viewId)
-        const content = contentFn ? contentFn() : null
+        const content = contentFn ? await contentFn() : null
         const err = !content ? 'view not found' : null
 
         return {
@@ -72,9 +73,6 @@ export class Router {
     static async getDynamicContent({ pathname, viewId }): IView {
         if (!this.database) await this.initDatabase()
         if (!viewId) viewId = this.getViewIdByPathname(pathname)
-
-        console.log('this.database =', this.database)
-        console.log('viewId =', viewId)
 
         return this.getViewContent(viewId)
     }

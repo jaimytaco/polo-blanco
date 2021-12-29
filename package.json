@@ -9,11 +9,9 @@
     "preview": "astro preview"
   },
   "dependencies": {
+    "astro": "^0.20.1",
     "comlink": "^4.3.1",
     "firebase": "^9.6.1",
     "idb": "^7.0.0"
-  },
-  "devDependencies": {
-    "astro": "^0.20.1"
   }
 }

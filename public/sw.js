@@ -1,7 +1,7 @@
 import { Router } from '/_astro/src/scripts/modules/router.js'
 
 const STATIC_CACHE_PREFIX = 'sw-poloblanco'
-const STATIC_CACHE_VERSION = 18
+const STATIC_CACHE_VERSION = 48
 const STATIC_CACHE_NAME = `${STATIC_CACHE_PREFIX}-static-${STATIC_CACHE_VERSION}`
 
 const ALL_CACHES = [
@@ -121,33 +121,26 @@ addEventListener('activate', e => {
 const serveWithStream = async (e, content) => {
     const response = await caches.match(new Request('/blank'))
     const blank = await response.text()
+    const html = blank
+        .replace('<!-- [DYNAMIC TITLE] -->', content.head.title)
+        .replace('<!-- [DYNAMIC META] -->', content.head.meta)
+        .replace('<!-- [DYNAMIC BODY] -->', content.body)
 
     return streamHTML(e, [
-        blank
-            .replace('<!-- [DYNAMIC TITLE] -->', content.head.title)
-            .replace('<!-- [DYNAMIC META] -->', content.head.meta)
-            .replace('<!-- [DYNAMIC BODY] -->', content.body)
+        html
     ])
+}
+
+const serveDynamically = async (e, pathname) => {
+    const { content, err } = await Router.getDynamicContent({ pathname })
+
+    return err ? serveFromCache(new Request('/404')) : serveWithStream(e, content)
 }
 
 addEventListener('fetch', e => {
     const url = new URL(e.request.url)
     const { origin, pathname, href } = url
+    const bypassFetch = href.includes('hmr-client.js') || location.origin !== origin
 
-    if (href.includes('hmr-client.js')) return
-    if (location.origin !== origin) return
-
-    if (TO_CACHE.includes(pathname)) {
-        e.respondWith(serveFromCache(e.request))
-        return
-    }
-
-    const { content, err } = Router.getDynamicContent({ pathname })
-
-    console.log('content =', content)
-    console.log('err =', err)
-    
-    // if (!err) e.respondWith(serveWithStream(e, content))
-
-    // e.respondWith(serveFromCache(new Request('/404')))
+    if (!bypassFetch) e.respondWith(TO_CACHE.includes(pathname) ? serveFromCache(e.request) : serveDynamically(e, pathname))
 })
