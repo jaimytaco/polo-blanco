@@ -7,6 +7,7 @@ const viewId = 'public-dynamic'
 
 await ViewGenerator.initDatabase()
 const { content, err } = await ViewGenerator.getDynamicContent({ viewId })
+if (err) throw err
 
 ---
     
