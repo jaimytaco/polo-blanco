@@ -71,7 +71,6 @@ export class Router {
     }
 
     static async getDynamicContent({ pathname, viewId }): IView {
-        // if (!this.database) await this.initDatabase()
         if (!viewId) viewId = this.getViewIdByPathname(pathname)
 
         return this.getViewContent(viewId)

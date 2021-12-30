@@ -4,20 +4,15 @@ import HomeLayout from '../layouts/HomeLayout.astro'
 import { EDatabaseMode } from '../scripts/enums/database.enum'
 import { Database } from '../scripts/modules/database'
 import { Category } from '../scripts/models/category.model'
+import { Router } from '../scripts/modules/router'
 
-await Database.init()
-const docs = await Category.getAll(Database, EDatabaseMode.Online)
+const viewId = 'public-dynamic'
+
+await Router.initDatabase()
+const { content, err } = await Router.getDynamicContent({ viewId })
 
 ---
     
-<HomeLayout title="dynamic">
-    <h1>Playing with astro's dynamic </h1>
-    <a style="width: 100%; display: block;" href="/about">Go to about</a>
-
-    {
-        docs
-            .map(function(doc){
-                return `<a style="width: 100%; display: block;" href="/category/${doc.slug}">Go to ${doc.slug}</a>`
-            })
-    }
+<HomeLayout title="{ content.head.title }" meta="{ content.head.meta }">
+    { content.body }
 </HomeLayout>

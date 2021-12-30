@@ -17,5 +17,5 @@ yarn-error.log*
 # macOS-specific files
 .DS_Store
 
-# processed files
+# astro processed files
 .crswap

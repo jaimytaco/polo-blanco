@@ -9,7 +9,7 @@ class App{
     static database: IDatabase
     
     static async init(){
-        await PWA.registerSW()
+        // await PWA.registerSW()
 
         // const { Database } = await import('../modules/database')
         // this.database = Database

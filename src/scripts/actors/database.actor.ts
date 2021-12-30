@@ -1,5 +1,5 @@
 import { EDatabaseMode } from '../enums/database.enum'
-import { getServiceWorkerContainer } from '../helpers/browser.helper'
+import { getServiceWorkerContainer, isNode } from '../helpers/browser.helper'
 import { IDatabaseActor } from '../interfaces/database.actor.interface'
 import { Firebase as OnlineDB } from '../services/firebase.service'
 import { IndexedDb as LocalDB } from '../services/indexedDb.service'
@@ -11,6 +11,8 @@ export class DatabaseActor implements IDatabaseActor{
     }
 
     static getAll(collectionName: string, mode: string){
+        if (isNode()) mode = EDatabaseMode.Online
+
         if (mode === EDatabaseMode.Online) return OnlineDB.getAll(collectionName)
         if (mode === EDatabaseMode.Local) return LocalDB.getInitialData(collectionName, 'all')
     }
