@@ -1,24 +1,10 @@
 import { IDatabase } from '../interfaces/database.interface'
-import { IError } from '../interfaces/error.interface'
 import { Database } from '../modules/database'
 import { EDatabaseMode } from '../enums/database.enum'
 import { Category } from '../models/category.model'
+import { IView, IViewContent, IViewContentHead } from '../interfaces/viewGenerator.interface'
 
-interface IViewContentHead {
-    title: string,
-    meta: string
-}
-
-interface IViewContent {
-    head: IViewContentHead,
-    body: string
-}
-
-interface IView implements IError {
-    content: IViewContent
-}
-
-export class Router {
+export class ViewGenerator {
     static database: IDatabase
 
     static async initDatabase() {
@@ -41,11 +27,12 @@ export class Router {
                     },
                     body: `
                         <h1>Dynamic view rendered with streams</h1>
-                        ${categories
-                            .map(function (doc) {
-                                return `<a style="width: 100%; display: block;" href="/category/${doc.slug}">Go to ${doc.slug}</a>`
-                            })
-                            .join('')
+                        ${
+                            categories
+                                .map(function (doc) {
+                                    return `<a style="width: 100%; display: block;" href="/category/${doc.slug}">Go to ${doc.slug}</a>`
+                                })
+                                .join('')
                         }
                     `
                 }
@@ -53,10 +40,10 @@ export class Router {
         }[viewId]
     }
 
-    static getViewIdByPathname(pathname: string): string | null {
-        if (pathname === '/dynamic') return 'public-dynamic'
-
-        return null
+    static getViewIdByPathname(pathname: string): string | undefined {
+        return {
+            '/dynamic': 'public-dynamic'
+        }[pathname]
     }
 
     static async getViewContent(viewId: string): IView {

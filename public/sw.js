@@ -1,4 +1,4 @@
-import { Router } from '/_astro/src/scripts/modules/router.js'
+import { ViewGenerator } from '/_astro/src/scripts/modules/viewGenerator.js'
 
 const STATIC_CACHE_PREFIX = 'sw-poloblanco'
 const STATIC_CACHE_VERSION = 58
@@ -49,7 +49,7 @@ const SCRIPTS = [
     '/_astro/src/scripts/modules/database.js',
     '/_astro/src/scripts/modules/main.js',
     '/_astro/src/scripts/modules/pwa.js',
-    '/_astro/src/scripts/modules/router.js',
+    '/_astro/src/scripts/modules/viewGenerator.js',
 
     '/_astro/src/scripts/services/firebase.service.js',
     '/_astro/src/scripts/services/indexedDb.service.js',
@@ -69,7 +69,7 @@ const cacheStaticAssets = async _ => {
         const cache = await caches.open(STATIC_CACHE_NAME)
         cache.addAll(TO_CACHE)
 
-        await Router.initDatabase()
+        await ViewGenerator.initDatabase()
     } catch (err) {
         console.error(err)
     }
@@ -134,7 +134,7 @@ const serveWithStream = async (e, content) => {
 }
 
 const serveDynamically = async (e, pathname) => {
-    const { content, err } = await Router.getDynamicContent({ pathname })
+    const { content, err } = await ViewGenerator.getDynamicContent({ pathname })
 
     return err ? serveFromCache(new Request('/404')) : serveWithStream(e, content)
 }

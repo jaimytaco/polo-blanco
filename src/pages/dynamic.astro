@@ -1,15 +1,12 @@
 ---
 
 import HomeLayout from '../layouts/HomeLayout.astro'
-import { EDatabaseMode } from '../scripts/enums/database.enum'
-import { Database } from '../scripts/modules/database'
-import { Category } from '../scripts/models/category.model'
-import { Router } from '../scripts/modules/router'
+import { ViewGenerator } from '../scripts/modules/viewGenerator'
 
 const viewId = 'public-dynamic'
 
-await Router.initDatabase()
-const { content, err } = await Router.getDynamicContent({ viewId })
+await ViewGenerator.initDatabase()
+const { content, err } = await ViewGenerator.getDynamicContent({ viewId })
 
 ---
     
