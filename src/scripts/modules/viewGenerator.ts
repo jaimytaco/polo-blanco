@@ -18,8 +18,6 @@ export class ViewGenerator {
         return {
             'public-dynamic': async function (): IViewContent {
                 const categories = await Category.getAll(database, EDatabaseMode.Local)
-                console.log('categories =', categories)
-
                 return {
                     head: {
                         title: 'Dynamic | Polo Blanco',

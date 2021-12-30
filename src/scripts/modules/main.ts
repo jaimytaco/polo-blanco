@@ -1,7 +1,7 @@
-import { EDatabaseMode } from '../enums/database.enum'
-import { IDatabase } from '../interfaces/database.interface'
+// import { EDatabaseMode } from '../enums/database.enum'
+// import { IDatabase } from '../interfaces/database.interface'
 
-import { Category } from '../models/category.model'
+// import { Category } from '../models/category.model'
 
 import { PWA } from '../modules/pwa'
 
@@ -9,7 +9,7 @@ class App{
     static database: IDatabase
     
     static async init(){
-        // await PWA.registerSW()
+        await PWA.registerSW()
 
         // const { Database } = await import('../modules/database')
         // this.database = Database

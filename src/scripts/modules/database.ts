@@ -10,6 +10,7 @@ export class Database implements IDatabase{
     static supportsWorkerType = supportsWorkerType()
     static supportsLocalDB = supportsIndexedDB()
     static actor: IDatabaseActor | T
+    static models: Object
 
     static async init(){
         if ((isServiceWorker() || isBrowser()) && this.supportsWorkerType){
@@ -18,7 +19,6 @@ export class Database implements IDatabase{
             const worker = new Worker(url, { type: 'module' })
             this.actor = await wrap(worker)
         }else this.actor = DatabaseActor
-        // this.actor = DatabaseActor
         
         await this.actor.init(EDatabaseMode.Online)
 
@@ -32,16 +32,19 @@ export class Database implements IDatabase{
         }
     }
 
-    static async loadLocalDatabase(){
-        console.log('loadLocalDatabase')
-        const modelsToLoad = {
+    static async initModels(){
+        this.models = {
             'categories': await Category.getAll(this, EDatabaseMode.Online)
-        };
+        }
+    }
+
+    static async loadLocalDatabase(){
+        await this.initModels()
 
         await Promise.all(
-            Object.keys(modelsToLoad)
+            Object.keys(this.models)
                 .map(collectionName => {
-                    const docs = modelsToLoad[collectionName];
+                    const docs = this.models[collectionName];
                     console.info(`Loaded ${docs.length} docs in '${collectionName}'`);
                     return docs
                         .map(doc => this.actor.add(collectionName, doc, EDatabaseMode.Local));

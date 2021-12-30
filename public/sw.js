@@ -1,7 +1,7 @@
 import { ViewGenerator } from '/_astro/src/scripts/modules/viewGenerator.js'
 
 const STATIC_CACHE_PREFIX = 'sw-poloblanco'
-const STATIC_CACHE_VERSION = 58
+const STATIC_CACHE_VERSION = 59
 const STATIC_CACHE_NAME = `${STATIC_CACHE_PREFIX}-static-${STATIC_CACHE_VERSION}`
 
 const ALL_CACHES = [
