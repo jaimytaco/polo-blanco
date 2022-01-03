@@ -14,7 +14,8 @@ export class PWA {
                     {
                         scope: '/',
                         type: 'module',
-                    })
+                    }
+                )
 
                 if (registration.waiting && registration.active) {
                     // The page has been loaded when there's already a waiting and active SW.

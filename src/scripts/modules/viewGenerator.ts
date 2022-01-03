@@ -4,6 +4,7 @@ import { EDatabaseMode } from '../enums/database.enum'
 import { Category } from '../models/category.model'
 import { IView, IViewContent, IViewContentHead } from '../interfaces/viewGenerator.interface'
 
+
 export class ViewGenerator {
     static database: IDatabase
 

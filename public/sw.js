@@ -1,7 +1,7 @@
 import { ViewGenerator } from '/_astro/src/scripts/modules/viewGenerator.js'
 
 const STATIC_CACHE_PREFIX = 'sw-poloblanco'
-const STATIC_CACHE_VERSION = 59
+const STATIC_CACHE_VERSION = 61
 const STATIC_CACHE_NAME = `${STATIC_CACHE_PREFIX}-static-${STATIC_CACHE_VERSION}`
 
 const ALL_CACHES = [
@@ -34,12 +34,6 @@ const SCRIPTS = [
 
     '/_astro/src/scripts/helpers/astro.helper.js',
     '/_astro/src/scripts/helpers/browser.helper.js',
-
-    // '/_astro/src/scripts/interfaces/browser.interface.js',
-    // '/_astro/src/scripts/interfaces/category.model.interface.js',
-    // '/_astro/src/scripts/interfaces/database.actor.interface.js',
-    // '/_astro/src/scripts/interfaces/error.interface.js',
-    // '/_astro/src/scripts/interfaces/localDb.model.interface.js',
 
     '/_astro/src/scripts/libs/firebase-app-JS.js',
     '/_astro/src/scripts/libs/firebase-firestore-JS.js',
@@ -123,13 +117,12 @@ addEventListener('activate', e => {
 const serveWithStream = async (e, content) => {
     const response = await caches.match(new Request('/blank'))
     const blank = await response.text()
-    const html = blank
+
+    return streamHTML(e, [
+        blank
         .replace('<!-- [DYNAMIC TITLE] -->', content.head.title)
         .replace('<!-- [DYNAMIC META] -->', content.head.meta)
         .replace('<!-- [DYNAMIC BODY] -->', content.body)
-
-    return streamHTML(e, [
-        html
     ])
 }
 

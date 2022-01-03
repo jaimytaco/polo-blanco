@@ -13,7 +13,9 @@ export class Database implements IDatabase{
     static models: Object
 
     static async init(){
+        console.log('this.supportsWorkerType =', this.supportsWorkerType)
         if ((isServiceWorker() || isBrowser()) && this.supportsWorkerType){
+            console.log('running database in worker')
             const { wrap } = await import('comlink')
             const url = new URL(`${getAstroPath()}scripts/workers/database.worker.js`, import.meta.url)
             const worker = new Worker(url, { type: 'module' })
@@ -39,6 +41,7 @@ export class Database implements IDatabase{
     }
 
     static async loadLocalDatabase(){
+        console.log('loadLocalDatabase')
         await this.initModels()
 
         await Promise.all(

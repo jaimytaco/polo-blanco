@@ -24,7 +24,7 @@ export function supportsWorkerType(){
             supports = true
             return 
         } // it's been called, it's supported
-    };
+    }
     try {
         // We use "blob://" as url to avoid an useless network request.
         // This will either throw in Chrome
